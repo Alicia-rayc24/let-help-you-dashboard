@@ -6,7 +6,7 @@ import { Input } from './ui/input';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from './ui/table';
 import { Badge } from './ui/badge';
 import { toast } from 'sonner';
-import { UserPlus, Settings, Trash2, Edit, Calendar, Gift, Trophy, Palette, Info } from 'lucide-react';
+import { UserPlus, Settings, Trash2, Edit, Calendar, Gift, Trophy, Palette, Info, Camera, User } from 'lucide-react';
 import { MemberRole, SchoolState, TheatreEvent, AwardType, Member } from '../types';
 
 export const Admin = () => {
@@ -29,7 +29,8 @@ export const Admin = () => {
     phone: '',
     dob: '',
     year: '1.1',
-    inactiveReason: false
+    inactiveReason: false,
+    photo: ''
   });
 
   const [newEvent, setNewEvent] = useState({
@@ -39,6 +40,26 @@ export const Admin = () => {
     type: 'meeting' as any,
     link: ''
   });
+
+  const handlePhotoChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      if (file.size > 2 * 1024 * 1024) {
+        toast.error("Image size must be less than 2MB");
+        return;
+      }
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        const base64String = reader.result as string;
+        if (editingMember) {
+          setEditingMember({ ...editingMember, photo: base64String });
+        } else {
+          setNewMember({ ...newMember, photo: base64String });
+        }
+      };
+      reader.readAsDataURL(file);
+    }
+  };
 
   const handleAddMember = () => {
     if (!newMember.name || !newMember.admissionNumber) return toast.error("Missing fields");
@@ -51,6 +72,18 @@ export const Admin = () => {
       groups: [],
       points: 0,
       attendance: []
+    });
+    setNewMember({
+      name: '',
+      admissionNumber: '',
+      password: '123',
+      role: 'Member',
+      schoolState: 'active',
+      phone: '',
+      dob: '',
+      year: '1.1',
+      inactiveReason: false,
+      photo: ''
     });
     setShowAddMember(false);
     toast.success("Member added successfully!");
@@ -135,6 +168,35 @@ export const Admin = () => {
             <Card className="bg-slate-900/80 border-amber-500/30 text-white">
               <CardHeader><CardTitle>{editingMember ? 'Edit Member' : 'Add New Member'}</CardTitle></CardHeader>
               <CardContent className="grid md:grid-cols-3 gap-4">
+                <div className="md:col-span-3 flex flex-col md:flex-row items-center gap-6 mb-4 p-4 bg-white/5 rounded-xl border border-white/10">
+                  <div className="relative group">
+                    <div className="w-24 h-24 rounded-full bg-slate-800 border-2 border-amber-500/50 flex items-center justify-center overflow-hidden shadow-lg shadow-amber-500/20">
+                      {(editingMember?.photo || newMember.photo) ? (
+                        <img 
+                          src={editingMember ? editingMember.photo : newMember.photo} 
+                          className="w-full h-full object-cover" 
+                          alt="Preview" 
+                        />
+                      ) : (
+                        <User size={40} className="text-amber-500/30" />
+                      )}
+                    </div>
+                    <label className="absolute bottom-0 right-0 p-2 bg-amber-600 rounded-full cursor-pointer shadow-lg hover:bg-amber-500 transition-colors border-2 border-slate-900">
+                      <Camera size={14} className="text-white" />
+                      <input 
+                        type="file" 
+                        accept="image/*" 
+                        onChange={handlePhotoChange}
+                        className="hidden"
+                      />
+                    </label>
+                  </div>
+                  <div className="flex-1 text-center md:text-left">
+                    <h4 className="font-bold text-amber-200">Profile Picture</h4>
+                    <p className="text-xs text-white/50 mt-1 max-w-xs">Upload a clear photo for the directory. Square aspect ratio works best.</p>
+                  </div>
+                </div>
+
                 <Input 
                   placeholder="Full Name" 
                   value={editingMember ? editingMember.name : newMember.name} 
@@ -195,6 +257,7 @@ export const Admin = () => {
               <Table>
                 <TableHeader className="bg-black/40">
                   <TableRow className="hover:bg-transparent border-white/10">
+                    <TableHead className="text-amber-200 font-bold w-12"></TableHead>
                     <TableHead className="text-amber-200 font-bold">Name</TableHead>
                     <TableHead className="text-amber-200 font-bold">Adm No</TableHead>
                     <TableHead className="text-amber-200 font-bold">Role</TableHead>
@@ -206,6 +269,17 @@ export const Admin = () => {
                 <TableBody>
                   {members.map(member => (
                     <TableRow key={member.id} className="border-white/5 hover:bg-white/5 transition-colors">
+                      <TableCell>
+                        <div className="w-8 h-8 rounded-full overflow-hidden border border-white/10 bg-white/5">
+                          {member.photo ? (
+                            <img src={member.photo} className="w-full h-full object-cover" alt="" />
+                          ) : (
+                            <div className="w-full h-full flex items-center justify-center text-[10px] text-white/20">
+                              <User size={12} />
+                            </div>
+                          )}
+                        </div>
+                      </TableCell>
                       <TableCell className="font-medium">{member.name}</TableCell>
                       <TableCell>{member.admissionNumber}</TableCell>
                       <TableCell>
