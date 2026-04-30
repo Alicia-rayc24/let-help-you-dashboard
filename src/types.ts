@@ -3,6 +3,7 @@ import { createContext, useContext, useState, useEffect } from 'react';
 export type SchoolState = 'active' | 'inactive' | 'graduate';
 export type MemberRole = 'Chairperson' | 'Secretary' | 'Treasurer' | 'Member';
 export type GroupType = 'acting' | 'pr' | 'writing' | 'leader' | 'bible study leader' | 'director' | 'writer' | 'leaders' | 'pr team' | 'actor';
+export type PaymentStatus = 'paid' | 'pending' | 'partial';
 
 export interface Member {
   id: string;
@@ -13,6 +14,9 @@ export interface Member {
   dob: string;
   monthlyContribution: number;
   weeklyChallenge: number;
+  semesterContribution: number;
+  yearlyContribution: number;
+  paymentStatus: PaymentStatus;
   participation: number; // Percentage
   role: MemberRole;
   groups: GroupType[];

@@ -90,16 +90,16 @@ function App() {
         `}>
           <div className="p-6 h-full flex flex-col">
             <div className="flex items-center gap-3 mb-10 px-2">
-              <div className="w-10 h-10 bg-amber-600 rounded-lg flex items-center justify-center font-bold text-white shadow-lg shadow-amber-600/20">
+              <div className="w-10 h-10 bg-red-700 rounded-lg flex items-center justify-center font-bold text-white shadow-lg shadow-red-900/20">
                 DT
               </div>
               <div>
                 <h1 className="text-xl font-bold text-white tracking-tight">Daystar Theatre</h1>
-                <p className="text-[10px] text-amber-500 uppercase font-bold tracking-[0.2em]">Arts & Drama</p>
+                <p className="text-[10px] text-red-500 uppercase font-bold tracking-[0.2em]">Arts & Drama</p>
               </div>
             </div>
 
-            <nav className="flex-1 space-y-1">
+            <nav className="flex-1 space-y-2 bg-[#E3D5CA]/10 p-2 rounded-2xl">
               {menuItems.map((item) => (
                 <button
                   key={item.id}
@@ -108,14 +108,14 @@ function App() {
                     setIsSidebarOpen(false);
                   }}
                   className={`
-                    w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all
+                    w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all border-none
                     ${activeView === item.id 
-                      ? 'bg-amber-600 text-white shadow-lg shadow-amber-600/20' 
-                      : 'text-amber-100/60 hover:bg-white/5 hover:text-white'}
+                      ? 'bg-red-700 text-white shadow-lg shadow-red-900/40 scale-[1.02]' 
+                      : 'bg-[#E3D5CA] text-slate-900 hover:bg-[#D5BDAF]'}
                   `}
                 >
                   <item.icon size={20} />
-                  <span className="font-medium">{item.label}</span>
+                  <span className="font-bold">{item.label}</span>
                 </button>
               ))}
             </nav>
@@ -123,7 +123,7 @@ function App() {
             <div className="pt-6 border-t border-white/10">
               <button 
                 onClick={() => setCurrentUser(null)}
-                className="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-red-400 hover:bg-red-400/10 transition-all font-medium"
+                className="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-red-400 hover:bg-red-400/10 transition-all font-bold"
               >
                 <LogOut size={20} />
                 Sign Out
@@ -148,15 +148,15 @@ function App() {
             <div className="flex items-center gap-4">
               <button className="relative text-amber-100/60 hover:text-white p-2 transition-colors">
                 <Bell size={22} />
-                <span className="absolute top-1.5 right-1.5 w-2 h-2 bg-amber-500 rounded-full border-2 border-black/20"></span>
+                <span className="absolute top-1.5 right-1.5 w-2 h-2 bg-red-600 rounded-full border-2 border-black/20"></span>
               </button>
               <div className="h-8 w-[1px] bg-white/10"></div>
               <div className="flex items-center gap-3">
                 <div className="text-right hidden sm:block">
                   <p className="text-sm font-bold text-white leading-tight">{currentUser.name}</p>
-                  <p className="text-[10px] text-amber-500/70 uppercase font-bold">{currentUser.role}</p>
+                  <p className="text-[10px] text-red-500 uppercase font-bold">{currentUser.role}</p>
                 </div>
-                <div className="w-10 h-10 rounded-full border border-white/20 overflow-hidden bg-amber-600/20 shadow-lg">
+                <div className="w-10 h-10 rounded-full border border-white/20 overflow-hidden bg-red-600/20 shadow-lg">
                   <img src={currentUser.photo || `https://api.dicebear.com/7.x/avataaars/svg?seed=${currentUser.name}`} alt="" className="w-full h-full object-cover" />
                 </div>
               </div>
